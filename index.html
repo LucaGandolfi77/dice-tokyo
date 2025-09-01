@@ -110,36 +110,6 @@
             transform: none;
         }
 
-        .dice-label {
-            font-size: 1rem;
-            margin-top: 10px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .winner-indicator {
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            background: gold;
-            color: #333;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .winner-indicator.show {
-            opacity: 1;
-        }
-
         .result-text {
             margin-top: 2rem;
             font-size: 1.3rem;
@@ -151,30 +121,20 @@
     </style>
 </head>
 <body>
-    <h1>🎲 Gioco dei Dadi 🎲</h1>
+    <h1>🎲 TOKYO 🎲</h1>
     
     <div class="dice-container">
-        <div class="dice-wrapper">
-            <div class="dice" id="dice1">
-                <span id="value1">?</span>
-                <div class="winner-indicator" id="winner1">👑</div>
-            </div>
-            <div class="dice-label">Dado 1</div>
+        <div class="dice" id="dice1">
+            <span id="value1">?</span>
         </div>
         
-        <div class="dice-wrapper">
-            <div class="dice" id="dice2">
-                <span id="value2">?</span>
-                <div class="winner-indicator" id="winner2">👑</div>
-            </div>
-            <div class="dice-label">Dado 2</div>
+        <div class="dice" id="dice2">
+            <span id="value2">?</span>
         </div>
     </div>
     
     <button class="spin-button" id="spinButton">SPIN</button>
     
-    <div class="result-text" id="resultText">Premi SPIN per lanciare i dadi!</div>
-
     <script>
         class DiceGame {
             constructor() {
@@ -182,11 +142,8 @@
                 this.dice2 = document.getElementById('dice2');
                 this.value1 = document.getElementById('value1');
                 this.value2 = document.getElementById('value2');
-                this.winner1 = document.getElementById('winner1');
-                this.winner2 = document.getElementById('winner2');
                 this.spinButton = document.getElementById('spinButton');
                 this.resultText = document.getElementById('resultText');
-                this.diceContainer = document.querySelector('.dice-container');
                 
                 this.currentValue1 = 0;
                 this.currentValue2 = 0;
@@ -201,11 +158,6 @@
             spin() {
                 // Disabilita il pulsante durante il lancio
                 this.spinButton.disabled = true;
-                this.resultText.textContent = "Lancio in corso...";
-                
-                // Nascondi le corone
-                this.winner1.classList.remove('show');
-                this.winner2.classList.remove('show');
                 
                 // Aggiungi animazione di rotazione
                 this.dice1.classList.add('spinning');
@@ -230,9 +182,6 @@
                 this.currentValue1 = this.getRandomDiceValue();
                 this.currentValue2 = this.getRandomDiceValue();
                 
-                // Riorganizza i dadi in base al valore
-                this.arrangeDice();
-                
                 // Rimuovi l'animazione di rotazione
                 setTimeout(() => {
                     this.dice1.classList.remove('spinning');
@@ -246,37 +195,24 @@
                 }, 500);
             }
             
-            arrangeDice() {
-                const wrapper1 = this.dice1.parentElement;
-                const wrapper2 = this.dice2.parentElement;
-                
-                if (this.currentValue1 > this.currentValue2) {
-                    // Il dado 1 ha valore maggiore, mettilo sopra
-                    if (wrapper2.nextSibling === wrapper1) {
-                        this.diceContainer.insertBefore(wrapper1, wrapper2);
-                    }
-                } else if (this.currentValue2 > this.currentValue1) {
-                    // Il dado 2 ha valore maggiore, mettilo sopra
-                    if (wrapper1.nextSibling === wrapper2) {
-                        this.diceContainer.insertBefore(wrapper2, wrapper1);
-                    }
-                }
-                // Se sono uguali, mantieni l'ordine attuale
-            }
-            
             displayResults() {
                 this.value1.textContent = this.currentValue1;
                 this.value2.textContent = this.currentValue2;
                 
-                // Determina il vincitore e mostra la corona
-                if (this.currentValue1 > this.currentValue2) {
-                    this.winner1.classList.add('show');
-                    this.resultText.textContent = `🎉 Il Dado 1 vince con ${this.currentValue1}!`;
-                } else if (this.currentValue2 > this.currentValue1) {
-                    this.winner2.classList.add('show');
-                    this.resultText.textContent = `🎉 Il Dado 2 vince con ${this.currentValue2}!`;
-                } else {
-                    this.resultText.textContent = `🤝 Pareggio! Entrambi i dadi mostrano ${this.currentValue1}`;
+                if (this.currentValue1 === this.currentValue2 === 6) {
+                    this.resultText.textContent = `Coppia di 6!`;
+                } else if (this.currentValue1 === this.currentValue2 === 5) {
+                    this.resultText.textContent = `Coppia di 5!`;
+                } else if (this.currentValue1 === this.currentValue2 === 4) {
+                    this.resultText.textContent = `Coppia di 5!`;
+                } else if (this.currentValue1 === this.currentValue2 === 3) {
+                    this.resultText.textContent = `Coppia di 5!`;
+                } else if (this.currentValue1 === this.currentValue2 === 2) {
+                    this.resultText.textContent = `Coppia di 5!`;
+                } else if (this.currentValue1 === this.currentValue2 === 1) {
+                    this.resultText.textContent = `Coppia di 5!`;
+                } else if (this.currentValue1 === 2 && this.currentValue2 === 1) {
+                    this.resultText.textContent = `TOKYO!`;
                 }
             }
         }
