@@ -135,6 +135,8 @@
     
     <button class="spin-button" id="spinButton">SPIN</button>
     
+    <div class="result-text" id="resultText">Premi SPIN per lanciare i dadi!</div>
+
     <script>
         class DiceGame {
             constructor() {
@@ -143,10 +145,8 @@
                 this.value1 = document.getElementById('value1');
                 this.value2 = document.getElementById('value2');
                 this.spinButton = document.getElementById('spinButton');
-                this.resultText = document.getElementById('resultText');
-                
-                this.currentValue1 = 0;
-                this.currentValue2 = 0;
+                // Ho aggiunto qui l'elemento per visualizzare il risultato
+                this.resultText = document.getElementById('resultText'); 
                 
                 this.spinButton.addEventListener('click', () => this.spin());
             }
@@ -158,61 +158,67 @@
             spin() {
                 // Disabilita il pulsante durante il lancio
                 this.spinButton.disabled = true;
+                this.resultText.textContent = "Lancio in corso...";
                 
                 // Aggiungi animazione di rotazione
                 this.dice1.classList.add('spinning');
                 this.dice2.classList.add('spinning');
                 
-                // Genera valori casuali durante l'animazione
-                let spinCount = 0;
-                const spinInterval = setInterval(() => {
-                    this.value1.textContent = this.getRandomDiceValue();
-                    this.value2.textContent = this.getRandomDiceValue();
-                    spinCount++;
-                    
-                    if (spinCount >= 10) {
-                        clearInterval(spinInterval);
-                        this.finalizeSpin();
-                    }
-                }, 100);
-            }
-            
-            finalizeSpin() {
                 // Genera i valori finali
-                this.currentValue1 = this.getRandomDiceValue();
-                this.currentValue2 = this.getRandomDiceValue();
-                
-                // Rimuovi l'animazione di rotazione
+                const finalValue1 = this.getRandomDiceValue();
+                const finalValue2 = this.getRandomDiceValue();
+
+                // Aspetta che l'animazione finisca per mostrare il risultato
                 setTimeout(() => {
                     this.dice1.classList.remove('spinning');
                     this.dice2.classList.remove('spinning');
                     
-                    // Mostra i risultati finali
-                    this.displayResults();
+                    this.value1.textContent = finalValue1;
+                    this.value2.textContent = finalValue2;
+
+                    this.displayResults(finalValue1, finalValue2);
                     
-                    // Riabilita il pulsante
                     this.spinButton.disabled = false;
-                }, 500);
+                }, 1000); // Imposta il timeout alla stessa durata dell'animazione (1s)
             }
             
-            displayResults() {
-                this.value1.textContent = this.currentValue1;
-                this.value2.textContent = this.currentValue2;
-                
-                if (this.currentValue1 === this.currentValue2 === 6) {
-                    this.resultText.textContent = `Coppia di 6!`;
-                } else if (this.currentValue1 === this.currentValue2 === 5) {
-                    this.resultText.textContent = `Coppia di 5!`;
-                } else if (this.currentValue1 === this.currentValue2 === 4) {
-                    this.resultText.textContent = `Coppia di 5!`;
-                } else if (this.currentValue1 === this.currentValue2 === 3) {
-                    this.resultText.textContent = `Coppia di 5!`;
-                } else if (this.currentValue1 === this.currentValue2 === 2) {
-                    this.resultText.textContent = `Coppia di 5!`;
-                } else if (this.currentValue1 === this.currentValue2 === 1) {
-                    this.resultText.textContent = `Coppia di 5!`;
-                } else if (this.currentValue1 === 2 && this.currentValue2 === 1) {
+            displayResults(value1, value2) {
+                const sortedValues = [value1, value2].sort();
+
+                if (value1 === value2) {
+                    this.resultText.textContent = `Coppia di ${value1}!`;
+                } else if ((value1 === 2 && value2 === 1) || (value1 === 1 && value2 === 2)) {
                     this.resultText.textContent = `TOKYO!`;
+                } else if (sortedValues[1] === 3 && sortedValues[0] === 1) {
+                    this.resultText.textContent = `Trokio!`;
+                } else if (sortedValues[1] === 4 && sortedValues[0] === 2) {
+                    this.resultText.textContent = `Lasen!`;
+                } else if (sortedValues[1] === 6 && sortedValues[0] === 5) {
+                    this.resultText.textContent = `65!`;
+                } else if (sortedValues[1] === 6 && sortedValues[0] === 4) {
+                    this.resultText.textContent = `64!`;
+                } else if (sortedValues[1] === 6 && sortedValues[0] === 3) {
+                    this.resultText.textContent = `63!`;
+                } else if (sortedValues[1] === 6 && sortedValues[0] === 2) {
+                    this.resultText.textContent = `62!`;
+                } else if (sortedValues[1] === 6 && sortedValues[0] === 1) {
+                    this.resultText.textContent = `61!`;
+                } else if (sortedValues[1] === 5 && sortedValues[0] === 4) {
+                    this.resultText.textContent = `54!`;
+                } else if (sortedValues[1] === 5 && sortedValues[0] === 3) {
+                    this.resultText.textContent = `53!`;
+                } else if (sortedValues[1] === 5 && sortedValues[0] === 2) {
+                    this.resultText.textContent = `52!`;
+                } else if (sortedValues[1] === 5 && sortedValues[0] === 1) {
+                    this.resultText.textContent = `51!`;
+                } else if (sortedValues[1] === 4 && sortedValues[0] === 3) {
+                    this.resultText.textContent = `43!`;
+                } else if (sortedValues[1] === 4 && sortedValues[0] === 1) {
+                    this.resultText.textContent = `41!`;
+                } else if (sortedValues[1] === 3 && sortedValues[0] === 2) {
+                    this.resultText.textContent = `32!`;
+                } else {
+                    this.resultText.textContent = `Lancio completato. Riprova!`;
                 }
             }
         }
